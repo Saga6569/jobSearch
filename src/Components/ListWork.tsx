@@ -29,7 +29,7 @@ type ShiftItem = {
   customerRating?: number;
 };
 
-const ShiftCard = React.memo(({ item }: { item: ShiftItem }) => {
+const ShiftCard = React.memo(({ item, onPress }: { item: ShiftItem; onPress?: (it: ShiftItem) => void }) => {
   let workTypesText: string | undefined;
   if (Array.isArray(item.workTypes)) {
     if (item.workTypes.length > 0 && typeof item.workTypes[0] === 'object') {
@@ -65,7 +65,7 @@ const ShiftCard = React.memo(({ item }: { item: ShiftItem }) => {
   };
 
   return (
-    <TouchableOpacity className="w-full mb-4 p-3 bg-white rounded-xl shadow border border-gray-100">
+    <TouchableOpacity className="w-full mb-4 p-3 bg-white rounded-xl shadow border border-gray-100" onPress={() => onPress?.(item)}>
       <View className="flex-row items-start">
         {item.logo ? (
           <Image
@@ -129,10 +129,10 @@ const ShiftCard = React.memo(({ item }: { item: ShiftItem }) => {
   );
 });
 
-const RenderItemsList = ({ data = [], isLoading = false }: { data: ShiftItem[]; isLoading?: boolean; }) => {
+const RenderItemsList = ({ data = [], isLoading = false, onPressItem }: { data: ShiftItem[]; isLoading?: boolean; onPressItem?: (it: ShiftItem) => void; }) => {
   const renderItem = React.useCallback(
-    ({ item }: { item: ShiftItem }) => <ShiftCard item={item} />,
-    [],
+    ({ item }: { item: ShiftItem }) => <ShiftCard item={item} onPress={onPressItem} />,
+    [onPressItem],
   );
 
   const keyExtractor = (item: ShiftItem, index: number) =>

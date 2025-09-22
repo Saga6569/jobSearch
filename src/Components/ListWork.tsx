@@ -1,16 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
 
-// import { useNavigation } from '@react-navigation/native';
-// import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-// type RootStackParamList = {
-//   Home: undefined;
-//   MovieDetail: { movie: Movie };
-// };
-
-// type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
-
 type WorkType = { id: number | string; name: string; nameGt5?: string; nameLt5?: string; nameOne?: string };
 
 type ShiftItem = {
@@ -30,21 +20,17 @@ type ShiftItem = {
 };
 
 const ShiftCard = React.memo(({ item, onPress }: { item: ShiftItem; onPress?: (it: ShiftItem) => void }) => {
-  let workTypesText: string | undefined;
   let workTypeNames: string[] = [];
   if (Array.isArray(item.workTypes)) {
     if (item.workTypes.length > 0 && typeof item.workTypes[0] === 'object') {
       workTypeNames = (item.workTypes as WorkType[])
         .map(w => w.name)
         .filter(Boolean) as string[];
-      workTypesText = workTypeNames.join(', ');
     } else {
       workTypeNames = item.workTypes as string[];
-      workTypesText = workTypeNames.join(', ');
     }
   } else if (typeof item.workTypes === 'string') {
     workTypeNames = [item.workTypes];
-    workTypesText = item.workTypes;
   }
 
   const progress = (() => {

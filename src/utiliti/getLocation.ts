@@ -30,12 +30,9 @@ const requestLocationPermission = async () => {
         buttonPositive: 'OK',
       },
     );
-    console.log('granted', granted);
     if (granted === 'granted') {
-      console.log('You can use Geolocation');
       return true;
     } else {
-      console.log('You cannot use Geolocation');
       return false;
     }
   } catch (err) {
@@ -46,13 +43,11 @@ const requestLocationPermission = async () => {
 const getLocation = async (): Promise<LocationResponse> => {
   try {
     const hasPermission = await requestLocationPermission();
-    console.log('Permission result:', hasPermission);
 
     if (hasPermission) {
       return new Promise<LocationResponse>((resolve, reject) => {
         Geolocation.getCurrentPosition(
           (position: GeoPosition) => {
-            console.log('Position obtained:', position);
             const { coords, timestamp, mocked } = position as any;
             resolve({
               timestamp,
@@ -68,10 +63,7 @@ const getLocation = async (): Promise<LocationResponse> => {
               },
             });
           },
-          (error: GeoError) => {
-            console.log('Geolocation error:', error.code, error.message);
-            reject(error);
-          },
+          (error: GeoError) => reject(error),
           { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
         );
       });

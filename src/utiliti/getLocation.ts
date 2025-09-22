@@ -1,5 +1,22 @@
 import { PermissionsAndroid } from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
+import Geolocation, { GeoPosition, GeoError } from 'react-native-geolocation-service';
+
+export type Coordinates = {
+  latitude: number;
+  longitude: number;
+  accuracy?: number;
+  altitude?: number;
+  altitudeAccuracy?: number | null;
+  heading?: number;
+  speed?: number;
+};
+
+export type LocationResponse = {
+  timestamp: number;
+  mocked?: boolean;
+  provider?: string;
+  coords: Coordinates;
+};
 
 const requestLocationPermission = async () => {
   try {
@@ -26,19 +43,32 @@ const requestLocationPermission = async () => {
   }
 };
 
-const getLocation = async () => {
+const getLocation = async (): Promise<LocationResponse> => {
   try {
     const hasPermission = await requestLocationPermission();
     console.log('Permission result:', hasPermission);
 
     if (hasPermission) {
-      return new Promise((resolve, reject) => {
+      return new Promise<LocationResponse>((resolve, reject) => {
         Geolocation.getCurrentPosition(
-          position => {
+          (position: GeoPosition) => {
             console.log('Position obtained:', position);
-            resolve(position);
+            const { coords, timestamp, mocked } = position as any;
+            resolve({
+              timestamp,
+              mocked,
+              coords: {
+                latitude: coords.latitude,
+                longitude: coords.longitude,
+                accuracy: coords.accuracy,
+                altitude: coords.altitude,
+                altitudeAccuracy: (coords as any).altitudeAccuracy ?? null,
+                heading: coords.heading,
+                speed: coords.speed,
+              },
+            });
           },
-          error => {
+          (error: GeoError) => {
             console.log('Geolocation error:', error.code, error.message);
             reject(error);
           },

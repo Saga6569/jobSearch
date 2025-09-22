@@ -31,16 +31,19 @@ type ShiftItem = {
 
 const ShiftCard = React.memo(({ item, onPress }: { item: ShiftItem; onPress?: (it: ShiftItem) => void }) => {
   let workTypesText: string | undefined;
+  let workTypeNames: string[] = [];
   if (Array.isArray(item.workTypes)) {
     if (item.workTypes.length > 0 && typeof item.workTypes[0] === 'object') {
-      workTypesText = (item.workTypes as WorkType[])
+      workTypeNames = (item.workTypes as WorkType[])
         .map(w => w.name)
-        .filter(Boolean)
-        .join(', ');
+        .filter(Boolean) as string[];
+      workTypesText = workTypeNames.join(', ');
     } else {
-      workTypesText = (item.workTypes as string[]).join(', ');
+      workTypeNames = item.workTypes as string[];
+      workTypesText = workTypeNames.join(', ');
     }
   } else if (typeof item.workTypes === 'string') {
+    workTypeNames = [item.workTypes];
     workTypesText = item.workTypes;
   }
 
@@ -65,63 +68,75 @@ const ShiftCard = React.memo(({ item, onPress }: { item: ShiftItem; onPress?: (i
   };
 
   return (
-    <TouchableOpacity className="w-full mb-4 p-3 bg-white rounded-xl shadow border border-gray-100" onPress={() => onPress?.(item)}>
+    <TouchableOpacity className="w-full mb-5 p-4 bg-white rounded-2xl shadow border border-gray-100" onPress={() => onPress?.(item)}>
       <View className="flex-row items-start">
         {item.logo ? (
           <Image
             source={{ uri: item.logo }}
-            className="w-16 h-16 rounded-md mr-3"
+            className="w-20 h-20 rounded-lg mr-4"
             resizeMode="cover"
           />
         ) : (
-          <View className="w-16 h-16 rounded-md mr-3 bg-gray-200 items-center justify-center">
-            <Text className="text-gray-500 text-xs text-center">Лого</Text>
+          <View className="w-20 h-20 rounded-lg mr-4 bg-gray-200 items-center justify-center">
+            <Text className="text-gray-500 text-sm text-center">Лого</Text>
           </View>
         )}
 
         <View className="flex-1">
           <View className="flex-row justify-between items-start">
-            <Text className="text-base font-semibold flex-1 mr-2" numberOfLines={1}>
+            <Text className="text-xl font-semibold flex-1 mr-2" numberOfLines={1}>
               {item.companyName || 'Компания'}
             </Text>
             {typeof item.priceWorker === 'number' ? (
-              <View className="px-2 py-1 bg-blue-50 rounded-lg">
-                <Text className="text-sm font-bold text-blue-600">{item.priceWorker} ₽</Text>
+              <View className="px-2.5 py-1.5 bg-blue-50 rounded-lg">
+                <Text className="text-lg font-bold text-blue-600">{item.priceWorker} ₽</Text>
               </View>
             ) : null}
           </View>
-          {workTypesText ? (
-            <Text className="text-[11px] text-gray-500 mt-0.5" numberOfLines={1}>
-              {workTypesText}
-            </Text>
+          {workTypeNames.length > 0 ? (
+            <View className="mt-1 flex-row flex-wrap gap-1">
+              {workTypeNames.slice(0, 6).map((name, idx) => (
+                <View
+                  key={`${name}_${idx}`}
+                  className="px-2 py-0.5 rounded-full bg-gray-100"
+                >
+                  <Text className="text-xs text-gray-700">{name}</Text>
+                </View>
+              ))}
+              {workTypeNames.length > 6 && (
+                <View className="px-2 py-0.5 rounded-full bg-gray-100">
+                  <Text className="text-xs text-gray-700">+{workTypeNames.length - 6}</Text>
+                </View>
+              )}
+            </View>
           ) : null}
-          <Text className="text-xs text-gray-600 mt-1" numberOfLines={2}>📍 {item.address || 'Адрес не указан'}</Text>
+          <Text className="text-base text-gray-600 mt-1.5" numberOfLines={2}>📍 {item.address || 'Адрес не указан'}</Text>
         </View>
       </View>
 
-      <View className="mt-2 flex-row items-center justify-between">
-        <Text className="text-xs text-gray-700">🗓 {item.dateStartByCity}  ⏰ {item.timeStartByCity}–{item.timeEndByCity}</Text>
+      <View className="mt-3 flex-row items-center justify-between">
+        <Text className="text-base text-gray-700">🗓 {item.dateStartByCity}  ⏰ {item.timeStartByCity}–{item.timeEndByCity}</Text>
         <View className="flex-row items-center">
           {renderStars(item.customerRating)}
           {item.customerFeedbacksCount ? (
-            <Text className="text-[11px] text-gray-500 ml-1">{item.customerFeedbacksCount}</Text>
+            <Text className="text-sm text-gray-500 ml-1">{item.customerFeedbacksCount}</Text>
           ) : null}
         </View>
       </View>
 
-      <View className="mt-3">
-        <View className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+      <View className="mt-4">
+        <View className="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
           <View
             style={{ width: `${progress}%` }}
-            className={`h-2 ${progress >= 100 ? 'bg-green-500' : 'bg-blue-500'}`}
+            className={`h-2.5 ${progress >= 100 ? 'bg-green-500' : 'bg-blue-500'}`}
           />
         </View>
-        <View className="mt-1 flex-row justify-between">
-          <Text className="text-xs text-gray-600">
+        <View className="mt-1.5 flex-row justify-between">
+          <Text className="text-base text-gray-600">
             Набрано: {item.currentWorkers ?? 0}/{item.planWorkers ?? 0}
           </Text>
           {typeof item.customerRating !== 'number' && item.customerFeedbacksCount ? (
-            <Text className="text-[11px] text-gray-500">{item.customerFeedbacksCount}</Text>
+            <Text className="text-sm text-gray-500">{item.customerFeedbacksCount}</Text>
           ) : null}
         </View>
       </View>
@@ -130,6 +145,8 @@ const ShiftCard = React.memo(({ item, onPress }: { item: ShiftItem; onPress?: (i
 });
 
 const RenderItemsList = ({ data = [], isLoading = false, onPressItem }: { data: ShiftItem[]; isLoading?: boolean; onPressItem?: (it: ShiftItem) => void; }) => {
+  const memoContentPadding = React.useMemo(() => ({ paddingBottom: 24 }), []);
+
   const renderItem = React.useCallback(
     ({ item }: { item: ShiftItem }) => <ShiftCard item={item} onPress={onPressItem} />,
     [onPressItem],
@@ -160,7 +177,12 @@ const RenderItemsList = ({ data = [], isLoading = false, onPressItem }: { data: 
         data={data}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 24 }}
+        contentContainerStyle={memoContentPadding}
+        initialNumToRender={8}
+        windowSize={10}
+        maxToRenderPerBatch={8}
+        updateCellsBatchingPeriod={50}
+        removeClippedSubviews
         showsVerticalScrollIndicator={false}
       />
     </View>

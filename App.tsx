@@ -1,5 +1,5 @@
 import './global.css';
-// simport { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Main from './src/pages/Main';
 import ShiftDetail from './src/pages/ShiftDetail';
 
@@ -10,12 +10,16 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const RootStack = createNativeStackNavigator({
   screens: {
     Home: Main,
-    ShiftDetail: ShiftDetail,
+    Detail: ShiftDetail,
   },
 });
 
 const Navigation = createStaticNavigation(RootStack);
 
 export default function App() {
-  return <Navigation />;
+  return (
+    <SafeAreaProvider style={{ flex: 1 }}>
+      <Navigation />
+    </SafeAreaProvider>
+  );
 }

@@ -20,9 +20,9 @@ const Main = () => {
   }, []);
 
   return (
-    <View className="flex-1 items-center justify-center bg-white">
+    <View className="flex-1 bg-white">
       {isLoding && (
-        <View>
+        <View className="flex-1 items-center justify-center">
           <Text>Загрузка</Text>
         </View>
       )}
@@ -31,7 +31,13 @@ const Main = () => {
           <RenderItemsList
             data={work}
             isLoading={isLoding}
-            onPressItem={(item: any) => navigation.navigate('ShiftDetail', { item })}
+            onPressItem={(item: any) => {
+              const index = shiftsStore.items.findIndex((it) => it.id === item?.id);
+              if (index >= 0) {
+                shiftsStore.selectByIndex(index);
+              }
+              navigation.navigate('Detail', { item });
+            }}
           />
         </View>
       )}

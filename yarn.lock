@@ -5300,7 +5300,14 @@ mkdirp@^1.0.4:
   resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-1.0.4.tgz"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-mobx@^6.13.7:
+mobx-react-lite@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.npmjs.org/mobx-react-lite/-/mobx-react-lite-4.1.0.tgz"
+  integrity sha512-QEP10dpHHBeQNv1pks3WnHRCem2Zp636lq54M2nKO2Sarr13pL4u6diQXf65yzXUn0mkk18SyIDCm9UOJYTi1w==
+  dependencies:
+    use-sync-external-store "^1.4.0"
+
+mobx@^6.13.7, mobx@^6.9.0:
   version "6.13.7"
   resolved "https://registry.npmjs.org/mobx/-/mobx-6.13.7.tgz"
   integrity sha512-aChaVU/DO5aRPmk1GX8L+whocagUUpBQqoPtJk+cm7UOXUk87J4PeWCh6nNmTTIfEhiR9DI/+FnA8dln/hTK7g==
@@ -5968,7 +5975,7 @@ react-test-renderer@19.1.0:
     react-is "^19.1.0"
     scheduler "^0.26.0"
 
-react@*, "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", react@^19.1.0, "react@>= 18.2.0", react@>=16.8, react@>=17.0.0, react@>=18, react@19.1.0:
+react@*, "react@^16.8.0 || ^17 || ^18 || ^19", "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", react@^19.1.0, "react@>= 18.2.0", react@>=16.8, react@>=17.0.0, react@>=18, react@19.1.0:
   version "19.1.0"
   resolved "https://registry.npmjs.org/react/-/react-19.1.0.tgz"
   integrity sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==
@@ -6938,7 +6945,7 @@ use-latest-callback@^0.2.4:
   resolved "https://registry.npmjs.org/use-latest-callback/-/use-latest-callback-0.2.4.tgz"
   integrity sha512-LS2s2n1usUUnDq4oVh1ca6JFX9uSqUncTfAm44WMg0v6TxL7POUTk1B044NH8TeLkFbNajIsgDHcgNpNzZucdg==
 
-use-sync-external-store@^1.5.0:
+use-sync-external-store@^1.4.0, use-sync-external-store@^1.5.0:
   version "1.5.0"
   resolved "https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.5.0.tgz"
   integrity sha512-Rb46I4cGGVBmjamjphe8L/UnvJD+uPPtTkNvX5mZgqdbavhI4EbgIWJiIHXJ8bc/i9EQGPRh4DwEURJ552Do0A==

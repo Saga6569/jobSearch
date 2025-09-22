@@ -26,23 +26,32 @@ const requestLocationPermission = async () => {
   }
 };
 
-const getLocation = (setLoc: any) => {
-  const result = requestLocationPermission();
-  result.then(res => {
-    console.log('res is:', res);
-    if (res) {
-      Geolocation.getCurrentPosition(
-        position => {
-          setLoc(position);
-        },
-        error => {
-          // See error code charts below.
-          console.log(error.code, error.message);
-        },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-      );
+const getLocation = async () => {
+  try {
+    const hasPermission = await requestLocationPermission();
+    console.log('Permission result:', hasPermission);
+
+    if (hasPermission) {
+      return new Promise((resolve, reject) => {
+        Geolocation.getCurrentPosition(
+          position => {
+            console.log('Position obtained:', position);
+            resolve(position);
+          },
+          error => {
+            console.log('Geolocation error:', error.code, error.message);
+            reject(error);
+          },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+        );
+      });
+    } else {
+      throw new Error('Location permission denied');
     }
-  });
+  } catch (error) {
+    console.error('Error in getLocation:', error);
+    throw error;
+  }
 };
 
 export default getLocation;
